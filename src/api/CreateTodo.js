@@ -1,12 +1,11 @@
 import { gql } from "@apollo/client";
 
 const CREATE_TODO = gql`
-  mutation CreateTodo($completed: Boolean, $task: String) {
-    insert_todo(objects: { completed: $completed, task: $task }) {
+  mutation CreateTodo($nama: String, $Tempat: String) {
+    insert_todo(objects: { nama: $nama, tempat: $tempat }) {
       returning {
-        completed
-        id
-        task
+        nama
+        tempat
       }
     }
   }

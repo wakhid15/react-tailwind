@@ -40,12 +40,11 @@ const Jumbotron = () => {
             <div className="flex h-full items-center justify-center">
               <div className="text-white">
                 <h2 className="mb-4 text-4xl font-semibold">
-                  STMIK PPKIA PRADNYA PARAMITA{' '}
+                  EXSPLORE MALANG{' '}
                 </h2>
                 <h4 className="mb-2 text-xl font-semibold">MALANG</h4>
                 <p className="mb-6 text-xl font-semibold">
-                  Jl. Laksda Adi Sucipto No.249a, Pandanwangi, Kec. Blimbing,
-                  Kota Malang, Jawa Timur 65126
+                  JANGAN DI RUMAH AJA MALANG ITU LUAS, HEALING YUUK...!!!
                 </p>
                 <Link to={'/notfound'}>
                   <button

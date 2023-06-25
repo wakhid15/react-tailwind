@@ -16,7 +16,7 @@ function Navigation() {
   };
   const navigation = [
     { name: "BERANDA", href: "/", current: true },
-    { name: "WISATA", href: "/swapi-people", current: false },
+    { name: "PESANAN", href: "/swapi-people", current: false },
     { name: "BOOKING TICKET", href: "/todo", current: false },
   ];
   const userNavigation = [

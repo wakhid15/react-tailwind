@@ -1,108 +1,130 @@
-import { useQuery, useMutation } from "@apollo/client";
-import Navigation from "../components/Navigation";
-import GET_TODOS from "../api/GetToDo";
-import TodoItem from "../components/TodoItem";
-import { useState } from "react";
-import CREATE_TODO from "../api/CreateTodo";
-import UPDATE_TODO from "../api/UpdateTodo";
-import DELETE_TODO from "../api/DeleteTodo";
+import { useMutation, useQuery } from '@apollo/client';
+import React, { useState } from 'react';
+import GET_PEMESANAN from '../api/GetToDo';
+import { gql } from "@apollo/client";
+import Navigation from '../components/Navigation';
 
-function Todo() {
-  const { loading, error, data, refetch } = useQuery(GET_TODOS);
-  const [addTodo] = useMutation(CREATE_TODO);
-  const [updateTodo] = useMutation(UPDATE_TODO);
-  const [deleteTodo] = useMutation(DELETE_TODO);
-  const [inputTask, setInputTask] = useState();
+const INSERT_PEMESANAN = gql`
+  mutation InsertPemesanan(
+    $pemesan: String!
+    $lokasi: String!
+    $tglCheckin: String!
+    $tglCheckout: String!
+  ) {
+    insert_pemesanan_one(
+      object: {
+        pemesan: $pemesan
+        lokasi: $lokasi
+        tglCheckin: $tglCheckin
+        tglCheckout: $tglCheckout
+      }
+    ) {        
+      pemesan
+      lokasi
+      tglCheckin
+      tglCheckout
+    }
+  }
+`;
 
-  const handleInputTaskChange = (e) => {
-    setInputTask(e.target.value);
-  };
+const App = () => {
+  const [pemesan, setpemesan] = useState('');
+  const [lokasi, setlokasi] = useState('');
+  const [tglCheckin, settglCheckin] = useState('');
+  const [tglCheckout, settglCheckout] = useState('');
+  
+  const {refetch} = useQuery(GET_PEMESANAN);
 
-  const handleUpdateTodo = (id) => {
-    updateTodo({
+  const [addPemesanan] = useMutation(INSERT_PEMESANAN, {
+    onCompleted: () => {
+      refetch();
+    }
+  })
+
+  const handleAdd = () => {
+    if (pemesan && lokasi && tglCheckin && tglCheckout)
+    // Logika pemrosesan form, misalnya mengirim data ke server
+    addPemesanan({
       variables: {
-        id: id,
+        pemesan,
+        lokasi,
+        tglCheckin,
+        tglCheckout,
       },
-    })
-      .then((response) => {
-        console.log("Succes update data");
-        refetch();
-      })
-      .catch((error) => {
-        console.log("Error update data", error);
-      });
+    });
+    setpemesan('');
+    setlokasi('');
+    settglCheckin('');
+    settglCheckout('');
   };
 
-  const handleDeleteTodo = (id) => {
-    deleteTodo({
-      variables: {
-        id: id,
-      },
-    })
-      .then((response) => {
-        console.log("Succes delete data");
-        refetch();
-      })
-      .catch((error) => {
-        console.log("Error delete data", error);
-      });
-  };
-
-  const handleSubmitTask = () => {
-    addTodo({
-      variables: {
-        completed: false,
-        task: inputTask,
-      },
-    })
-      .then((response) => {
-        console.log("Succes input data");
-        refetch();
-      })
-      .catch((error) => {
-        console.log("Error input data", error);
-        // return <p>Error : {error}</p>;
-      });
-  };
-
-  if (loading) return <p>Loading....</p>;
-  if (error) return <p>Error : {error.message}</p>;
   return (
-    <div>
-      <Navigation></Navigation>
-      <h2 class="text-4xl font-bold leading-tight pt-12 pl-12 pr-12 pb-2">
-        To Do
-      </h2>
-      <form class="pl-12 pr-12 flex-col">
-        <input
-          type="text"
-          autoComplete="username"
-          className="w-full block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-          placeholder="input teks"
-          value={inputTask}
-          onChange={handleInputTaskChange}
-        />
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          type="submit"
-          onClick={handleSubmitTask}
-        >
-          Submit
-        </button>
+    <div >
+      <Navigation/>
+      <h1 className="text-2xl font-bold mb-4 flex justify-center">Booking</h1>
+      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="id">
+            pemesan
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="id"
+            type="text"
+            placeholder="Masukkan pemesanan"
+            value={pemesan}
+            onChange={(e) => setpemesan(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="pemesan">
+            lokasi
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="pemesan"
+            type="text"
+            placeholder="Masukkan Nama lokasi"
+            value={lokasi}
+            onChange={(e) => setlokasi(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="tanggal Checkin">
+            Tanggal Checkin
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="tglCheckin"
+            type="text"
+            value={tglCheckin}
+            onChange={(e) => settglCheckin(e.target.value)}
+          />
+        </div>
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="tanggal-Checkout">
+            Tanggal Checkout
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="tanggal-Checkout"
+            type="text"
+            value={tglCheckout}
+            onChange={(e) => settglCheckout(e.target.value)}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button"
+            onClick={handleAdd}
+          >
+            Submit
+          </button>
+        </div>
       </form>
-
-      <hr class="mt-4 mb-8 ml-12 mr-12"></hr>
-      <ol class="pl-16 pr-16">
-        {data.todo.map((todo) => (
-          <TodoItem
-            todo={todo}
-            updateTodo={() => handleUpdateTodo(todo.id)}
-            deleteTodo={() => handleDeleteTodo(todo.id)}
-          ></TodoItem>
-        ))}
-      </ol>
     </div>
   );
 }
 
-export default Todo;
+export default App;

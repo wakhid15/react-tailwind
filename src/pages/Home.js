@@ -29,7 +29,7 @@ const Home = () => {
                 <h1 className="mb-8 text-4xl w-10 h-20 font-semibold">
                   EXPLORE MALANG{' '}
                 </h1>
-                <h4 className="mb-2 text-xl font-semibold">JANGAN DI RUMAH AJA MALANG ITU LUAS, HEALING YUUK...!!!</h4>
+                <h4 className="mb-2 text-xl font-semibold">JANGAN DI RUMAH AJA MALANG ITU DINGIN, HEALING YUUK...!!!</h4>
                 <p className="mb-6 text-xl font-semibold">
                   
                 </p>

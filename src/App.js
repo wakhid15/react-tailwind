@@ -16,6 +16,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/swapi-people" element={<SwapiPeople />} />
         <Route path="/todo" element={<Todo />} />
+        
       </Routes>
     </ApolloProvider>
   );
